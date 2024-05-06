@@ -1,13 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import StarRatings from "react-star-ratings";
-const ProductItem = ({ product }) => {
+const ProductItem = ({ product, columnSize }) => {
   return (
-    <div className="col-sm-12 col-md-6 col-lg-3 my-3">
+    <div className={`col-sm-12 col-md-6 col-lg-${columnSize} my-3`}>
       <div className="card p-3 rounded">
         <img
           className="card-img-top mx-auto"
-          src={product?.images[0]?.url}
+          src={
+            product?.images[0]
+              ? product.images[0]?.url
+              : "/images/default_product.png"
+          }
           alt=""
         />
         <div className="card-body ps-3 d-flex justify-content-center flex-column">
@@ -21,7 +25,7 @@ const ProductItem = ({ product }) => {
               numberOfStars={5}
               name="rating"
               starDimension="22px"
-              startSpacing=" 1px"
+              starSpacing=" 1px"
             />
             <span id="no_of_reviews" className="pt-2 ps-2">
               ({product.numOfReviews})

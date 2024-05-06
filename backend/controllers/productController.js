@@ -3,7 +3,7 @@ import Product from "../models/product.js";
 import APIFilters from "../utils/apiFilters.js";
 import ErrorHandler from "../utils/errorHandler.js";
 // Get all Products  => /api/v1/products
-export const getProducts = catchAsyncError(async (req, res) => {
+export const getProducts = catchAsyncError(async (req, res, next) => {
   const resPerPage = 4;
   console.log(">>check data");
   const apiFilters = new APIFilters(Product, req.query).search().filter();
