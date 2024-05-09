@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import { Toaster } from "react-hot-toast";
 import ProductDetail from "./components/product/ProductDetail";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
 function App() {
   return (
     <Router>
@@ -14,6 +16,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/product/:id" element={<ProductDetail />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </div>
 
