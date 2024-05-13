@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import UserLayout from "../layout/UserLayout";
+import MetaData from "../layout/MetaData";
 
 const UpdatePassword = () => {
   const { user } = useSelector((state) => state.auth);
@@ -22,13 +23,14 @@ const UpdatePassword = () => {
     }
   }, [error, isSuccess]);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     const userData = { password, oldPassword };
-    updatePassword(userData);
+    await updatePassword(userData);
   };
   return (
     <UserLayout>
+      <MetaData title={"Update Password"} />
       <div class="row wrapper">
         <div class="col-10 col-lg-8">
           <form class="shadow rounded bg-body" onSubmit={submitHandler}>

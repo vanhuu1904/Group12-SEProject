@@ -24,12 +24,12 @@ const UploadAvatar = () => {
     }
   }, [error, isSuccess]);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     const userData = {
       avatar,
     };
-    uploadAvatar(userData);
+    await uploadAvatar(userData);
   };
   const onChange = (e) => {
     const reader = new FileReader();
@@ -43,6 +43,7 @@ const UploadAvatar = () => {
   };
   return (
     <UserLayout>
+      <MetaData title={"Upload Avatar"} />
       <div className="row wrapper">
         <div className="col-10 col-lg-8">
           <form className="shadow rounded bg-body" onSubmit={submitHandler}>

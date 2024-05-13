@@ -6,10 +6,13 @@ import { useSelector } from "react-redux";
 import { useLazyLogoutQuery } from "../../redux/api/authApi";
 
 const Header = () => {
-  const { isLoading } = useGetMeQuery();
   const navigate = useNavigate();
+
+  const { isLoading } = useGetMeQuery();
   const [logout, { data }] = useLazyLogoutQuery();
+
   const { user } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
   const logoutHandler = async () => {
     await logout();
     navigate(0);
@@ -27,15 +30,15 @@ const Header = () => {
         <Search />
       </div>
       <div className="col-12 col-md-3 mt-4 mt-md-0 text-center">
-        <a href="/cart" style={{ "text-decoration": " none" }}>
+        <Link to="/cart" style={{ "text-decoration": " none" }}>
           <span id="cart" className="ms-3">
             {" "}
             Cart{" "}
           </span>
           <span className="ms-1" id="cart_count">
-            0
+            {cartItems.length}
           </span>
-        </a>
+        </Link>
         {user ? (
           <div className="ms-4 dropdown">
             <button

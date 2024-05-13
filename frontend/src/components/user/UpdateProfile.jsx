@@ -27,13 +27,14 @@ const UpdateProfile = () => {
     }
   }, [user, error, isSuccess]);
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
     const userData = { name, email };
-    updateProfile(userData);
+    await updateProfile(userData);
   };
   return (
     <UserLayout>
+      <MetaData title={"Update Profile"} />
       <div className="row wrapper">
         <div className="col-10 col-lg-8">
           <form className="shadow rounded bg-body" onSubmit={submitHandler}>
