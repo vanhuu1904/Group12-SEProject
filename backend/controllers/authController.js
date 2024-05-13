@@ -1,5 +1,6 @@
 import catchAsyncError from "../middlewares/catchAsyncError.js";
 import User from "../models/user.js";
+import { delete_file, upload_file } from "../utils/cloudinary.js";
 import { getRestPasswordTemplate } from "../utils/emailTemplates.js";
 import ErrorHandler from "../utils/errorHandler.js";
 import sendEmail from "../utils/sendEmail.js";
@@ -50,6 +51,27 @@ export const logout = catchAsyncError(async (req, res, next) => {
   });
   res.status(200).json({
     message: "Logged out successfully",
+  });
+});
+
+// Upload user avatar =>  /api/v1/me/upload_avatar
+export const uploadAvatar = catchAsyncError(async (req, res, next) => {
+  const avatarResponse = await upload_file(
+    req.body.avatar,
+    "Home/TECHSTORE/avatars"
+  );
+
+  // Remove previous avatar
+  if (req?.user?.avatar?.url) {
+    await delete_file(req?.user?.avatar?.public_id);
+  }
+  console.log(">>>check req: ", req.body.avatar);
+  console.log(">>>check avatar: ", avatarResponse);
+  const user = await User.findByIdAndUpdate(req.user._id, {
+    avatar: avatarResponse,
+  });
+  res.status(200).json({
+    user,
   });
 });
 // Forgot password  =>  /api/v1/password/forgot
@@ -127,8 +149,8 @@ export const updatePassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req?.user?._id).select("+password");
 
   // check the previous user password
-  const isPasswordMatched = user.comparePassword(req.body.oldPassword);
-
+  const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
+  console.log(">>>check password: ", isPasswordMatched);
   if (!isPasswordMatched) {
     return next(new ErrorHandler("Old Password is incorrect"));
   }

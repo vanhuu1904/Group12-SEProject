@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import StarRatings from "react-star-ratings";
-const ProductItem = ({ product, columnSize }) => {
+const ProductItem = ({ product, columnSize, index }) => {
   return (
-    <div className={`col-sm-12 col-md-6 col-lg-${columnSize} my-3`}>
+    <div
+      className={`col-sm-12 col-md-6 col-lg-${columnSize} my-3`}
+      key={`${index}`}
+    >
       <div className="card p-3 rounded">
         <img
           className="card-img-top mx-auto"

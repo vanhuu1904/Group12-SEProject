@@ -34,7 +34,7 @@ app.use(function (req, res, next) {
 //  Connecting to database
 connectDatabase();
 
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 // Import all routes
 import productRoutes from "./routes/products.js";

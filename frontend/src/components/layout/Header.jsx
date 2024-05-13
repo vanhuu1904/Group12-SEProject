@@ -10,8 +10,8 @@ const Header = () => {
   const navigate = useNavigate();
   const [logout, { data }] = useLazyLogoutQuery();
   const { user } = useSelector((state) => state.auth);
-  const logoutHandler = () => {
-    logout();
+  const logoutHandler = async () => {
+    await logout();
     navigate(0);
   };
   return (
