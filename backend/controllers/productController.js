@@ -29,7 +29,7 @@ export const newProduct = catchAsyncError(async (req, res) => {
   });
 });
 
-// Get signle Product details   => /api/v1/products/:id
+// Get single Product details   => /api/v1/products/:id
 export const getProductDetails = catchAsyncError(async (req, res, next) => {
   const product = await Product.findById(req?.params?.id);
   if (!product) {
