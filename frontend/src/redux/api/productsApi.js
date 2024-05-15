@@ -4,6 +4,7 @@ export const productApi = createApi({
   reducerPath: "productApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/v1" }),
   keepUnusedDataFor: 30,
+  tagTypes: ["Product"],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (params) => ({
@@ -20,8 +21,23 @@ export const productApi = createApi({
     }),
     getProductDetails: builder.query({
       query: (id) => `/product/${id}`,
+      providesTags: ["Product"],
+    }),
+    submitReview: builder.mutation({
+      query(body) {
+        return {
+          url: "/product/reviews",
+          method: "PUT",
+          body,
+        };
+      },
+      invalidatesTags: ["Product"],
     }),
   }),
 });
 
-export const { useGetProductsQuery, useGetProductDetailsQuery } = productApi;
+export const {
+  useGetProductsQuery,
+  useGetProductDetailsQuery,
+  useSubmitReviewMutation,
+} = productApi;
