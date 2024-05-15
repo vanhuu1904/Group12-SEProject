@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import StarRatings from "react-star-ratings";
-import { useSubmitReviewMutation } from "../../redux/api/productsApi";
+import {
+  useCanUserReviewQuery,
+  useSubmitReviewMutation,
+} from "../../redux/api/productsApi";
 import toast from "react-hot-toast";
 
 const NewReview = ({ productId }) => {
@@ -8,6 +11,9 @@ const NewReview = ({ productId }) => {
   const [comment, setComment] = useState("");
   const [submitReview, { isLoading, isSuccess, error }] =
     useSubmitReviewMutation();
+
+  const { data } = useCanUserReviewQuery(productId);
+  const canReview = data?.canReviewed;
 
   useEffect(() => {
     if (error) {
@@ -24,15 +30,17 @@ const NewReview = ({ productId }) => {
   };
   return (
     <div>
-      <button
-        id="review_btn"
-        type="button"
-        class="btn btn-primary mt-4"
-        data-bs-toggle="modal"
-        data-bs-target="#ratingModal"
-      >
-        Submit Your Review
-      </button>
+      {canReview && (
+        <button
+          id="review_btn"
+          type="button"
+          class="btn btn-primary mt-4"
+          data-bs-toggle="modal"
+          data-bs-target="#ratingModal"
+        >
+          Submit Your Review
+        </button>
+      )}
 
       <div class="row mt-2 mb-5">
         <div class="rating w-50">
