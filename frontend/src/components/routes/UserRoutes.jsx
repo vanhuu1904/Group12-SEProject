@@ -1,5 +1,7 @@
 import React from "react";
-import ProductDetail from "../product/ProductDetail";
+import { Route } from "react-router-dom";
+
+import ProductDetails from "../product/ProductDetails";
 import Login from "../auth/Login";
 import Register from "../auth/Register";
 import Profile from "../user/Profile";
@@ -17,16 +19,18 @@ import MyOrders from "../order/MyOrders";
 import OrderDetails from "../order/OrderDetails";
 import Invoice from "../invoice/Invoice";
 import Home from "../Home";
-import { Route } from "react-router-dom";
-const UserRoutes = () => {
+
+const userRoutes = () => {
   return (
     <>
       <Route path="/" element={<Home />} />
-      <Route path="/product/:id" element={<ProductDetail />} />
+      <Route path="/product/:id" element={<ProductDetails />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+
       <Route path="/password/forgot" element={<ForgotPassword />} />
       <Route path="/password/reset/:token" element={<ResetPassword />} />
+
       <Route
         path="/me/profile"
         element={
@@ -35,6 +39,7 @@ const UserRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/me/update_profile"
         element={
@@ -42,7 +47,8 @@ const UserRoutes = () => {
             <UpdateProfile />
           </ProtectedRoute>
         }
-      />{" "}
+      />
+
       <Route
         path="/me/upload_avatar"
         element={
@@ -51,6 +57,7 @@ const UserRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/me/update_password"
         element={
@@ -59,6 +66,7 @@ const UserRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route path="/cart" element={<Cart />} />
       <Route
         path="/shipping"
@@ -75,7 +83,7 @@ const UserRoutes = () => {
             <ConfirmOrder />
           </ProtectedRoute>
         }
-      />{" "}
+      />
       <Route
         path="/payment_method"
         element={
@@ -83,7 +91,8 @@ const UserRoutes = () => {
             <PaymentMethod />
           </ProtectedRoute>
         }
-      />{" "}
+      />
+
       <Route
         path="/me/orders"
         element={
@@ -92,6 +101,7 @@ const UserRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/me/order/:id"
         element={
@@ -100,6 +110,7 @@ const UserRoutes = () => {
           </ProtectedRoute>
         }
       />
+
       <Route
         path="/invoice/order/:id"
         element={
@@ -112,4 +123,4 @@ const UserRoutes = () => {
   );
 };
 
-export default UserRoutes;
+export default userRoutes;
