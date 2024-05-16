@@ -2,6 +2,7 @@ import catchAsyncError from "../middlewares/catchAsyncError.js";
 import Product from "../models/product.js";
 import Order from "../models/order.js";
 import APIFilters from "../utils/apiFilters.js";
+import { upload_file } from "../utils/cloudinary.js";
 import ErrorHandler from "../utils/errorHandler.js";
 // Get all Products  => /api/v1/products
 export const getProducts = catchAsyncError(async (req, res, next) => {
@@ -178,5 +179,23 @@ export const canUserReview = catchAsyncError(async (req, res) => {
   }
   return res.status(200).json({
     canReviewed: true,
+  });
+});
+// Upload product images   => /api/v1/admin/products/:id/upload_images
+export const uploadProductImages = catchAsyncError(async (req, res) => {
+  let product = await Product.findById(req?.params?.id);
+  if (!product) {
+    return res.status(404).json({
+      error: "Product not found",
+    });
+  }
+  const uploader = async (image) =>
+    upload_file(image, "Home/TECHSTORE/products");
+  const urls = await Promise.all((req?.body?.images).map(uploader));
+  product?.images?.push(...urls);
+
+  await product?.save();
+  res.status(200).json({
+    product,
   });
 });
