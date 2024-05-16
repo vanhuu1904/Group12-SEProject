@@ -63,7 +63,7 @@ const ListProducts = () => {
               <i className="fa fa-pencil"></i>
             </Link>
             <Link
-              to={`/admin/product/${product?._id}/upload_images`}
+              to={`/admin/products/${product?._id}/upload_images`}
               className="btn btn-outline-success ms-2"
             >
               <i className="fa fa-image"></i>

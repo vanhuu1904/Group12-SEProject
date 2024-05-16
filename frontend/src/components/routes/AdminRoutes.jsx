@@ -5,6 +5,7 @@ import Dashboard from "../Admin/Dashboard";
 import ListProducts from "../Admin/ListProducts";
 import UpdateProduct from "../Admin/UpdateProducts";
 import NewProduct from "../Admin/NewProduct";
+import UploadImages from "../Admin/UploadImages";
 
 const adminRoutes = () => {
   return (
@@ -38,6 +39,14 @@ const adminRoutes = () => {
         element={
           <ProtectedRoute admin={true}>
             <UpdateProduct />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/products/:id/upload_images"
+        element={
+          <ProtectedRoute admin={true}>
+            <UploadImages />
           </ProtectedRoute>
         }
       />
