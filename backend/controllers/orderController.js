@@ -171,6 +171,7 @@ function getDatesBetween(startDate, endDate) {
     dates.push(formattedDate);
     currentDate.setDate(currentDate.getDate() + 1);
   }
+  console.log(">>>check data: ", dates);
 
   return dates;
 }

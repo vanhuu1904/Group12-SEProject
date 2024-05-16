@@ -4,7 +4,7 @@ export const productApi = createApi({
   reducerPath: "productApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/v1" }),
   keepUnusedDataFor: 30,
-  tagTypes: ["Product"],
+  tagTypes: ["Product", "AdminProducts"],
   endpoints: (builder) => ({
     getProducts: builder.query({
       query: (params) => ({
@@ -36,6 +36,30 @@ export const productApi = createApi({
     canUserReview: builder.query({
       query: (productId) => `/can_review/?productId=${productId}`,
     }),
+    getAdminProducts: builder.query({
+      query: () => `/admin/products`,
+      providesTags: ["AdminProducts"],
+    }),
+    createProduct: builder.mutation({
+      query(body) {
+        return {
+          url: "/admin/products",
+          method: "POST",
+          body,
+        };
+      },
+      invalidatesTags: ["AdminProducts"],
+    }),
+    updateProduct: builder.mutation({
+      query({ body, id }) {
+        return {
+          url: `/admin/products/${id}`,
+          method: "PUT",
+          body,
+        };
+      },
+      invalidatesTags: ["Product", "AdminProducts"],
+    }),
   }),
 });
 
@@ -44,4 +68,7 @@ export const {
   useGetProductDetailsQuery,
   useSubmitReviewMutation,
   useCanUserReviewQuery,
+  useGetAdminProductsQuery,
+  useCreateProductMutation,
+  useUpdateProductMutation,
 } = productApi;
