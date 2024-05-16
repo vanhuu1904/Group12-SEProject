@@ -46,5 +46,5 @@ router
   .put(isAuthenticatedUser, authorizeRoles("admin"), uploadProductImages);
 router
   .route("/admin/products/:id/delete_image")
-  .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteProductImages);
+  .put(isAuthenticatedUser, authorizeRoles("admin"), deleteProductImages);
 export default router;

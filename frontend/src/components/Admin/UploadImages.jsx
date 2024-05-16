@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import AdminLayout from "../layout/AdminLayout";
 import MetaData from "../layout/MetaData";
 import {
+  useDeleteProductImageMutation,
   useGetProductDetailsQuery,
   useUploadProductImagesMutation,
 } from "../../redux/api/productsApi";
@@ -20,6 +21,10 @@ const UploadedImages = () => {
   const [uploadProductImages, { isLoading, isSuccess, error }] =
     useUploadProductImagesMutation();
   const { data } = useGetProductDetailsQuery(params?.id);
+  const [
+    deleteProductImage,
+    { isLoading: isDeleteLoading, error: deleteError },
+  ] = useDeleteProductImageMutation();
 
   useEffect(() => {
     if (data?.product) {
@@ -33,7 +38,11 @@ const UploadedImages = () => {
       toast.success("Images Uploaded");
       navigate("/admin/products");
     }
-  }, [data]);
+    if (deleteError) {
+      toast.error(error?.data?.message);
+      console.log("adsad");
+    }
+  }, [data, error, deleteError, isSuccess]);
   const onChange = (e) => {
     const files = Array.from(e.target.files);
     console.log(">>check files: ", files);
@@ -62,6 +71,9 @@ const UploadedImages = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     uploadProductImages({ id: params?.id, body: { images } });
+  };
+  const deleteImage = async (imgId) => {
+    await deleteProductImage({ id: params?.id, body: { imgId } });
   };
   return (
     <AdminLayout>
@@ -123,29 +135,33 @@ const UploadedImages = () => {
                 <div class="uploaded-images my-4">
                   <p class="text-success">Product Uploaded Images:</p>
                   <div class="row mt-1">
-                    {uploadedImages?.map((image) => (
-                      <div class="col-md-3 mt-2">
-                        <div class="card">
-                          <img
-                            src={image?.url}
-                            alt="Card"
-                            class="card-img-top p-2"
-                            style={{ width: "100%", height: "80px" }}
-                          />
-                          <button
-                            style={{
-                              "background-color": "#dc3545",
-                              "border-color": "#dc3545",
-                            }}
-                            class="btn btn-block btn-danger cross-button mt-1 py-0"
-                            disabled="true"
-                            type="button"
-                          >
-                            <i class="fa fa-trash"></i>
-                          </button>
+                    {uploadedImages?.map((image) => {
+                      console.log(">>>check image: ", image);
+                      return (
+                        <div class="col-md-3 mt-2">
+                          <div class="card">
+                            <img
+                              src={image?.url}
+                              alt="Card"
+                              class="card-img-top p-2"
+                              style={{ width: "100%", height: "80px" }}
+                            />
+                            <button
+                              style={{
+                                "background-color": "#dc3545",
+                                "border-color": "#dc3545",
+                              }}
+                              class="btn btn-block btn-danger cross-button mt-1 py-0"
+                              disabled={isLoading || isDeleteLoading}
+                              onClick={() => deleteImage(image?.public_id)}
+                              type="button"
+                            >
+                              <i class="fa fa-trash"></i>
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -155,9 +171,9 @@ const UploadedImages = () => {
               id="register_button"
               type="submit"
               class="btn w-100 py-2"
-              disabled={isLoading}
+              disabled={isLoading || isDeleteLoading}
             >
-              {isLoading ? "Uploading..." : "Upload"}
+              {isLoading || isDeleteLoading ? "Uploading..." : "Upload"}
             </button>
           </form>
         </div>
