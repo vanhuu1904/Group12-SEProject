@@ -76,6 +76,10 @@ export const deleteProduct = catchAsyncError(async (req, res) => {
       error: "Product not found",
     });
   }
+  // Delete image associated with product
+  for (let i = 0; i < product.images.length; i++) {
+    await delete_file(product.images[i].public_id);
+  }
   await product.deleteOne();
 
   res.status(200).json({
@@ -114,8 +118,6 @@ export const createProductReview = catchAsyncError(async (req, res, next) => {
     product.reviews.push(review);
     product.numOfReviews = product.reviews.length;
   }
-  console.log(">>>check length: ", product.reviews.length);
-  console.log(">>>check product: ", product.reviews);
   product.ratings =
     product.reviews.reduce((acc, item) => item.rating + acc, 0) /
     product.numOfReviews;

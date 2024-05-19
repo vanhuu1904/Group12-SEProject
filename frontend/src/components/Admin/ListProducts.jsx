@@ -3,17 +3,42 @@ import Loader from "../layout/Loader";
 import toast from "react-hot-toast";
 import { MDBDataTable } from "mdbreact";
 import MetaData from "../layout/MetaData";
-import { Link } from "react-router-dom";
-import { useGetAdminProductsQuery } from "../../redux/api/productsApi";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  useDeleteProductMutation,
+  useGetAdminProductsQuery,
+} from "../../redux/api/productsApi";
 import AdminLayout from "../layout/AdminLayout";
 const ListProducts = () => {
+  const navigate = useNavigate();
+
   const { data, isLoading, error } = useGetAdminProductsQuery();
+
+  const [
+    deleteProduct,
+    {
+      isLoading: isDeleteLoading,
+      error: deleteError,
+      isSuccess: isDeleteSuccess,
+    },
+  ] = useDeleteProductMutation();
 
   useEffect(() => {
     if (error) {
       toast.error(error?.data?.message);
     }
-  }, [error]);
+    if (deleteError) {
+      toast.error(deleteError?.data?.message);
+    }
+    if (isDeleteSuccess) {
+      toast.success("Deleted Product");
+      navigate("/admin/products");
+    }
+  }, [error, deleteError, isDeleteSuccess]);
+
+  const deleteProductHandler = async (id) => {
+    await deleteProduct(id);
+  };
   if (isLoading) return <Loader />;
 
   const setProducts = () => {
@@ -68,7 +93,11 @@ const ListProducts = () => {
             >
               <i className="fa fa-image"></i>
             </Link>
-            <button className="btn btn-outline-success ms-2">
+            <button
+              className="btn btn-outline-success ms-2"
+              onClick={() => deleteProductHandler(product?._id)}
+              disabled={isDeleteLoading}
+            >
               <i className="fa fa-trash"></i>
             </button>
           </>
