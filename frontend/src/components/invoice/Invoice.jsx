@@ -52,15 +52,11 @@ const Invoice = () => {
             </div>
             <h1>INVOICE # ${order?._id}</h1>
             <div id="company" className="clearfix">
-              <div>ShopIT</div>
+              <div>TECHSTORE</div>
+              <div>Đại học Bách Khoa Hà Nội</div>
+              <div>0399018968</div>
               <div>
-                455 Foggy Heights,
-                <br />
-                AZ 85004, US
-              </div>
-              <div>(602) 519-0450</div>
-              <div>
-                <a href="mailto:info@shopit.com">info@shopit.com</a>
+                <a href="mailto:huynam569@gmail.com">huynam569@gmail.com</a>
               </div>
             </div>
             <div id="project">

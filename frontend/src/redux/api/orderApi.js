@@ -4,6 +4,7 @@ export const orderApi = createApi({
   reducerPath: "orderApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/v1" }),
   keepUnusedDataFor: 30,
+  tagTypes: ["Order", "AdminOrders"],
   endpoints: (builder) => ({
     createNewOrder: builder.mutation({
       query(body) {
@@ -19,10 +20,34 @@ export const orderApi = createApi({
     }),
     orderDetails: builder.query({
       query: (id) => `/orders/${id}`,
+      providesTags: ["Order"],
     }),
     getDashboardSales: builder.query({
       query: ({ startDate, endDate }) =>
         `/admin/get_sales/?startDate=${startDate}&endDate=${endDate}`,
+    }),
+    getAdminOrders: builder.query({
+      query: () => `/admin/orders`,
+      providesTags: ["AdminOrders"],
+    }),
+    updateOrder: builder.mutation({
+      query({ body, id }) {
+        return {
+          url: `/admin/order/${id}`,
+          method: "PUT",
+          body,
+        };
+      },
+      invalidatesTags: ["Order"],
+    }),
+    deleteOrder: builder.mutation({
+      query(id) {
+        return {
+          url: `/admin/order/${id}`,
+          method: "DELETE",
+        };
+      },
+      invalidatesTags: ["AdminOrders"],
     }),
   }),
 });
@@ -32,4 +57,7 @@ export const {
   useMyOrdersQuery,
   useOrderDetailsQuery,
   useLazyGetDashboardSalesQuery,
+  useGetAdminOrdersQuery,
+  useUpdateOrderMutation,
+  useDeleteOrderMutation,
 } = orderApi;

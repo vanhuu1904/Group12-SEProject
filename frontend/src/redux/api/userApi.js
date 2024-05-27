@@ -5,7 +5,7 @@ export const userApi = createApi({
   reducerPath: "userApi",
   baseQuery: fetchBaseQuery({ baseUrl: "/api/v1" }),
   keepUnusedDataFor: 30,
-  tagTypes: ["User"],
+  tagTypes: ["User", "AdminUsers"],
   endpoints: (builder) => ({
     getMe: builder.query({
       query: () => `/me`,
@@ -72,6 +72,23 @@ export const userApi = createApi({
         };
       },
     }),
+    getAdminUsers: builder.query({
+      query: () => `/admin/users`,
+      providesTags: ["AdminUsers"],
+    }),
+    getUserDetails: builder.query({
+      query: (id) => `/admin/user/${id}`,
+    }),
+    updateUser: builder.mutation({
+      query({ id, body }) {
+        return {
+          url: `/admin/user/${id}`,
+          method: "PUT",
+          body,
+        };
+      },
+      invalidatesTags: ["AdminUsers"],
+    }),
   }),
 });
 
@@ -82,4 +99,7 @@ export const {
   useUpdatePasswordMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useGetAdminUsersQuery,
+  useGetUserDetailsQuery,
+  useUpdateUserMutation,
 } = userApi;
