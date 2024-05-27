@@ -5,28 +5,36 @@ import { MDBDataTable } from "mdbreact";
 import MetaData from "../layout/MetaData";
 import { Link, useNavigate } from "react-router-dom";
 import AdminLayout from "../layout/AdminLayout";
-import { useGetAdminUsersQuery } from "../../redux/api/userApi";
+import {
+  useDeleteUserMutation,
+  useGetAdminUsersQuery,
+} from "../../redux/api/userApi";
 const ListUsers = () => {
   const navigate = useNavigate();
 
   const { data, isLoading, error } = useGetAdminUsersQuery();
 
+  const [
+    deleteUser,
+    { error: deleteError, isLoading: isDeleteLoading, isSuccess },
+  ] = useDeleteUserMutation();
+
   useEffect(() => {
     if (error) {
       toast.error(error?.data?.message);
     }
-    // if (deleteError) {
-    //   toast.error(deleteError?.data?.message);
-    // }
-    // if (isDeleteSuccess) {
-    //   toast.success("Deleted user");
-    //   navigate("/admin/users");
-    // }
-  }, [error]);
+    if (deleteError) {
+      toast.error(deleteError?.data?.message);
+    }
+    if (isSuccess) {
+      toast.success("Deleted user");
+      navigate("/admin/users");
+    }
+  }, [error, deleteError, isSuccess]);
 
-  // const deleteuserHandler = async (id) => {
-  //   await deleteuser(id);
-  // };
+  const deleteUserHandler = async (id) => {
+    await deleteUser(id);
+  };
   if (isLoading) return <Loader />;
 
   const setUsers = () => {
@@ -75,7 +83,11 @@ const ListUsers = () => {
             >
               <i className="fa fa-pencil"></i>
             </Link>
-            <button className="btn btn-outline-success ms-2">
+            <button
+              className="btn btn-outline-danger ms-2"
+              onClick={() => deleteUserHandler(user?._id)}
+              disabled={isDeleteLoading}
+            >
               <i className="fa fa-trash"></i>
             </button>
           </>
