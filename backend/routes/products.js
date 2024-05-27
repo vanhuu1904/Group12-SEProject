@@ -7,7 +7,7 @@ import {
   deleteReview,
   getAdminProducts,
   getProductDetails,
-  getProductReview,
+  getProductReviews,
   getProducts,
   newProduct,
   updateProduct,
@@ -32,12 +32,12 @@ router
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteProduct);
 
 router
-  .route("/product/reviews")
+  .route("/reviews")
   .put(isAuthenticatedUser, createProductReview)
-  .get(isAuthenticatedUser, getProductReview);
+  .get(isAuthenticatedUser, getProductReviews);
 
 router
-  .route("/admin/product/reviews")
+  .route("/admin/reviews")
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteReview);
 router.route("/can_review").get(isAuthenticatedUser, canUserReview);
 
