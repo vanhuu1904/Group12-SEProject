@@ -4,7 +4,12 @@ import Loader from "../layout/Loader";
 import toast from "react-hot-toast";
 import { MDBDataTable } from "mdbreact";
 import MetaData from "../layout/MetaData";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { clearCart } from "../../redux/features/cartSlice";
 const MyOrders = () => {
@@ -12,9 +17,12 @@ const MyOrders = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const params = useParams();
+  console.log(">>Check params:");
 
   const [searchParams] = useSearchParams();
   const orderSuccess = searchParams.get("order_success");
+  useEffect(() => {}, [params]);
   useEffect(() => {
     if (error) {
       toast.error(error?.data?.message);

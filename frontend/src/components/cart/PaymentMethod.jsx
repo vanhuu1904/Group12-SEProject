@@ -4,17 +4,50 @@ import CheckoutSteps from "./CheckoutSteps";
 import { useSelector } from "react-redux";
 import { useCreateNewOrderMutation } from "../../redux/api/orderApi";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { calculateOrderCost } from "../../helpers/helpers";
+import { useCreateVNPayMutation } from "../../redux/api/vnpayApi";
 
 const PaymentMethod = () => {
   const [method, setMethod] = useState("");
   const { shippingInfo, cartItems } = useSelector((state) => state.cart);
-
+  const location = useLocation();
+  let searchParams = new URLSearchParams(location.search);
   const navigate = useNavigate();
 
   const [createNewOrder, { isLoading, error, isSuccess }] =
     useCreateNewOrderMutation();
+  const { itemsPrice, shippingPrice, totalPrice } =
+    calculateOrderCost(cartItems);
+  const orderData = {
+    shippingInfo,
+    orderItems: cartItems,
+    itemsPrice,
+    shippingAmount: shippingPrice,
+    totalAmount: totalPrice,
+    taxAmount: 0,
+    orderDescription: `Thanh toan don hang gia tri ${totalPrice}`,
+    bankCode: "",
+    paymentInfo: {
+      status: "Paid",
+    },
+    paymentMethod: "Card",
+  };
+
+  const [
+    createVNPay,
+    {
+      data,
+      isLoading: isVNPayLoading,
+      isSuccess: isVNPaySuccess,
+      error: isVNPayError,
+    },
+  ] = useCreateVNPayMutation();
 
   useEffect(() => {
     if (error) {
@@ -23,7 +56,21 @@ const PaymentMethod = () => {
     if (isSuccess) {
       navigate("/me/orders?order_success=true");
     }
-  }, [isSuccess, error]);
+    if (isVNPayError) {
+      toast.error(error?.data?.message);
+    }
+  }, [isSuccess, error, isVNPayError]);
+
+  useEffect(() => {
+    let vnp_ResponseCode = searchParams.get("vnp_ResponseCode");
+    if (vnp_ResponseCode === "00") {
+      toast.success("thanh toán thành công");
+      createNewOrder(orderData);
+      navigate("/me/orders?order_success=true");
+    } else if (vnp_ResponseCode === "24") {
+      toast.error("Thanh toán thất bại");
+    }
+  }, [searchParams]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -46,7 +93,24 @@ const PaymentMethod = () => {
       await createNewOrder(orderData);
     }
     if (method === "Card") {
-      // Stripe Checkout
+      // VNPay checkout
+      const orderData = {
+        shippingInfo,
+        orderItems: cartItems,
+        itemsPrice,
+        shippingAmount: shippingPrice,
+        totalAmount: totalPrice,
+        taxAmount: 0,
+        orderDescription: `Thanh toan don hang gia tri ${totalPrice}`,
+        bankCode: "",
+        paymentInfo: {
+          status: "Paid",
+        },
+        paymentMethod: "Card",
+      };
+      const res = await createVNPay({ orderData });
+      console.log(">>>check data: ", res);
+      window.open(res.data.vnpayUrl);
     }
   };
   return (
@@ -81,7 +145,7 @@ const PaymentMethod = () => {
                 onChange={(e) => setMethod("Card")}
               />
               <label class="form-check-label" for="cardradio">
-                Card - VISA, MasterCard
+                VNPay
               </label>
             </div>
 

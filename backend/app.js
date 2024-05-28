@@ -5,6 +5,7 @@ import errorMiddleware from "./middlewares/errors.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+
 // Handle Uncaught exceptions
 process.on("uncaughtException", (error) => {
   console.log(`ERROR: ${error}`);
@@ -40,9 +41,11 @@ app.use(cookieParser());
 import productRoutes from "./routes/products.js";
 import authRoutes from "./routes/auth.js";
 import orderRoutes from "./routes/order.js";
+import vnpayRoutes from "./routes/vnpay.js";
 app.use("/api/v1", productRoutes);
 app.use("/api/v1", authRoutes);
 app.use("/api/v1", orderRoutes);
+app.use("/api/v1", vnpayRoutes);
 // Using error middleware
 app.use(errorMiddleware);
 
