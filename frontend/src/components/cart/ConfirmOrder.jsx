@@ -39,7 +39,7 @@ const ConfirmOrder = () => {
                   <div className="col-4 col-lg-2">
                     <img
                       src={item?.image}
-                      alt="Laptop"
+                      alt={item?.image}
                       height="45"
                       width="65"
                     />

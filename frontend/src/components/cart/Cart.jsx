@@ -66,7 +66,7 @@ const Cart = () => {
                       <div class="col-4 col-lg-3">
                         <img
                           src={item?.image}
-                          alt="Laptop"
+                          alt={item?.name}
                           height="90"
                           width="115"
                         />
