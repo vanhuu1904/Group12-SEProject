@@ -5,6 +5,10 @@ import errorMiddleware from "./middlewares/errors.js";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import path from "path";
+// import { fileURLToPath } from "node:url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Handle Uncaught exceptions
 process.on("uncaughtException", (error) => {
@@ -12,7 +16,10 @@ process.on("uncaughtException", (error) => {
   console.log("Shuting down server due to Unhandled Promise Rejection");
   process.exit(1);
 });
-dotenv.config({ path: "backend/config/config.env" });
+
+if (process.env.NODE_ENV !== "PRODUCTION") {
+  dotenv.config({ path: "backend/config/config.env" });
+}
 
 // Config CORS
 app.use(
@@ -35,17 +42,32 @@ app.use(function (req, res, next) {
 //  Connecting to database
 connectDatabase();
 
-app.use(express.json({ limit: "10mb" }));
+app.use(
+  express.json({
+    limit: "10mb",
+    verify: (req, res, buf) => {
+      req.rawBody = buf.toString();
+    },
+  })
+);
 app.use(cookieParser());
 // Import all routes
 import productRoutes from "./routes/products.js";
 import authRoutes from "./routes/auth.js";
 import orderRoutes from "./routes/order.js";
 import vnpayRoutes from "./routes/vnpay.js";
+import { fileURLToPath } from "url";
 app.use("/api/v1", productRoutes);
 app.use("/api/v1", authRoutes);
 app.use("/api/v1", orderRoutes);
 app.use("/api/v1", vnpayRoutes);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "../frontend/dist/index.html"));
+  });
+}
 // Using error middleware
 app.use(errorMiddleware);
 

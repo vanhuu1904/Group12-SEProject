@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import AdminLayout from "../layout/AdminLayout";
 import MetaData from "../layout/MetaData";
 import { useNavigate } from "react-router-dom";
-import { PRODUCT_CATEGORIES } from "../../constants/constants";
+import {
+  PRODUCT_SMARTPHONE,
+  PRODUCT_HEADPHONE,
+  PRODUCT_CATEGORIES,
+} from "../../constants/constants";
 import { useCreateProductMutation } from "../../redux/api/productsApi";
 import toast from "react-hot-toast";
 

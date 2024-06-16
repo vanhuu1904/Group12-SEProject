@@ -34,7 +34,7 @@ const ProductItem = ({ product, columnSize, index }) => {
               ({product.numOfReviews})
             </span>
           </div>
-          <p className="card-text mt-2">{product?.price}$</p>
+          <p className="card-text mt-2">{product?.price}đ</p>
           <Link
             to={`product/${product?._id}`}
             id="view_btn"

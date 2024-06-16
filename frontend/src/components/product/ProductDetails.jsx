@@ -9,6 +9,7 @@ import { setCartItem } from "../../redux/features/cartSlice";
 import MetaData from "../layout/MetaData";
 import NewReview from "../reviews/NewReview";
 import ListReviews from "../reviews/ListReviews";
+import NotFound from "../layout/NotFound";
 
 const ProductDetail = () => {
   const params = useParams();
@@ -39,10 +40,6 @@ const ProductDetail = () => {
     }
   }, [isError]);
 
-  if (isLoading) {
-    return <Loader />;
-  }
-
   const decreaseQuantity = (e) => {
     if (quantity === 1) {
       setQuantity(product?.stock);
@@ -67,6 +64,14 @@ const ProductDetail = () => {
     dispatch(setCartItem(cartItem));
     toast.success("Item added to cart");
   };
+
+  if (error && error?.status == 404) {
+    return <NotFound />;
+  }
+
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <>
       <MetaData title={product?.name} />
@@ -124,7 +129,7 @@ const ProductDetail = () => {
           </div>
           <hr />
 
-          <p id="product_price">${product?.price}</p>
+          <p id="product_price">{product?.price}đ</p>
           <div className="stockCounter d-inline">
             <span className="btn btn-danger minus" onClick={decreaseQuantity}>
               -
@@ -162,7 +167,10 @@ const ProductDetail = () => {
           </p>
 
           <hr />
-
+          <h4 className="mt-2">Category:</h4>
+          <p>{product?.category}</p>
+          <h4 className="mt-2">Brand:</h4>
+          <p>{product?.brand}</p>
           <h4 className="mt-2">Description:</h4>
           <p>{product?.description}</p>
           <hr />

@@ -10,7 +10,6 @@ const productSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: [true, "Please enter product price"],
-      maxLength: [5, "Product price cannot exceed 5 digits"],
     },
     description: {
       type: String,
@@ -36,19 +35,15 @@ const productSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter product category"],
       enum: {
-        values: [
-          "Electronics",
-          "Cameras",
-          "Laptops",
-          "Accessories",
-          "Headphones",
-          "Food",
-          "Books",
-          "Sports",
-          "Outdoor",
-          "Home",
-        ],
+        values: ["Laptop", "Headphone", "Smartphone"],
         message: "Please select correct category",
+      },
+    },
+    brand: {
+      type: String,
+      required: [true, "Please enter product brand"],
+      enum: {
+        values: ["Apple", "Oppo", "Samsung", "Sony", "Xiaomi", "Nokia"],
       },
     },
     seller: {

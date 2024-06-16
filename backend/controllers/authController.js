@@ -6,6 +6,7 @@ import ErrorHandler from "../utils/errorHandler.js";
 import sendEmail from "../utils/sendEmail.js";
 import sendToken from "../utils/sendToken.js";
 import crypto from "crypto";
+
 // Register user  =>  /api/v1/register
 export const registerUser = catchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -15,10 +16,10 @@ export const registerUser = catchAsyncError(async (req, res, next) => {
     email,
     password,
   });
-  console.log(user);
-  const token = user.getJwtToken();
-
-  sendToken(user, 201, res);
+  res.status(201).json({
+    message: "Đăng kí thành công",
+  });
+  // sendToken(user, 201, res);
 });
 // Login user  =>  /api/v1/login
 export const loginUser = catchAsyncError(async (req, res, next) => {

@@ -32,9 +32,12 @@ const OrderDetails = () => {
         <div className="col-12 col-lg-9 mt-5 order-details">
           <div className="d-flex justify-content-between align-items-center">
             <h3 className="mt-5 mb-4">Your Order Details</h3>
-            <a className="btn btn-success" href="/invoice/order/order-id">
+            <Link
+              className="btn btn-success"
+              to={`/invoice/order/${order?._id}`}
+            >
               <i className="fa fa-print"></i> Invoice
-            </a>
+            </Link>
           </div>
           <table className="table table-striped table-bordered">
             <tbody>
@@ -98,7 +101,7 @@ const OrderDetails = () => {
               </tr>
               <tr>
                 <th scope="row">Amount Paid</th>
-                <td>${totalAmount}</td>
+                <td>{totalAmount}đ</td>
               </tr>
             </tbody>
           </table>
@@ -123,7 +126,7 @@ const OrderDetails = () => {
                 </div>
 
                 <div className="col-4 col-lg-2 mt-4 mt-lg-0">
-                  <p>${item?.price}</p>
+                  <p>{item?.price}đ</p>
                 </div>
 
                 <div className="col-4 col-lg-3 mt-4 mt-lg-0">

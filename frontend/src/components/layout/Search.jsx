@@ -6,11 +6,12 @@ const Search = () => {
   const navigate = useNavigate();
   const submitHandler = (e) => {
     e.preventDefault();
-    if (keyword?.trim()) {
-      navigate(`/?keyword=${keyword}`);
-    } else {
-      navigate("/");
-    }
+    navigate(`/?keyword=${keyword}`);
+
+    // if (keyword?.trim()) {
+    // } else {
+    //   navigate("/");
+    // }
   };
   return (
     <form onSubmit={submitHandler}>

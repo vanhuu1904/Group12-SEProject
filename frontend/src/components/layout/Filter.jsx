@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getPriceQueryParams } from "../../helpers/helpers";
-import { PRODUCT_CATEGORIES } from "../../constants/constants";
+import {
+  PRODUCT_CATEGORIES,
+  PRODUCT_SMARTPHONE,
+} from "../../constants/constants";
 import StarRatings from "react-star-ratings";
 
 const Filter = () => {
@@ -68,7 +71,7 @@ const Filter = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="Min ($)"
+              placeholder="Min (đ)"
               name="min"
               value={min}
               onChange={(e) => setMin(e.target.value)}
@@ -78,7 +81,7 @@ const Filter = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="Max ($)"
+              placeholder="Max (đ)"
               name="max"
               value={max}
               onChange={(e) => setMax(e.target.value)}
@@ -109,7 +112,23 @@ const Filter = () => {
           </label>
         </div>
       ))}
-
+      <h5 className="mb-3">Brand</h5>
+      {PRODUCT_SMARTPHONE?.map((brand, index) => (
+        <div className="form-check">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            name="brand"
+            id={`check-${index}`}
+            value={brand}
+            defaultChecked={defaultCheckHandler("brand", brand)}
+            onClick={(e) => handleClick(e.target)}
+          />
+          <label className="form-check-label" htmlFor="check5">
+            {brand}
+          </label>
+        </div>
+      ))}
       <hr />
       <h5 className="mb-3">Ratings</h5>
       {[5, 4, 3, 2, 1].map((rating) => (

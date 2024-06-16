@@ -56,6 +56,9 @@ const PaymentMethod = () => {
     if (isSuccess) {
       navigate("/me/orders?order_success=true");
     }
+    if (isVNPaySuccess) {
+      navigate("/me/orders?order_success=true");
+    }
     if (isVNPayError) {
       toast.error(error?.data?.message);
     }

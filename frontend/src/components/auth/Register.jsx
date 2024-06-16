@@ -2,20 +2,27 @@ import React, { useEffect, useState } from "react";
 import { useRegisterMutation } from "../../redux/api/authApi";
 import toast from "react-hot-toast";
 import MetaData from "../layout/MetaData";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",
   });
   const { name, email, password } = user;
-  const [register, { isLoading, data, error }] = useRegisterMutation();
+  const [register, { isLoading, data, error, isSuccess }] =
+    useRegisterMutation();
   useEffect(() => {
     if (error) {
       toast.error(error?.data?.message);
     }
-  }, [error]);
+    if (isSuccess) {
+      toast.success("Đăng kí thành công");
+      navigate("/login");
+    }
+  }, [error, isSuccess]);
   const submitHandler = async (e) => {
     e.preventDefault();
     const signUp = {
