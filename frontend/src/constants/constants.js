@@ -7,5 +7,5 @@ export const PRODUCT_SMARTPHONE = [
   "Xiaomi",
   "Nokia",
 ];
-export const PRODUCT_LAPTOP = [];
+export const PRODUCT_LAPTOP = ["Apple", "Asus", "Acer", "HP", "Dell"];
 export const PRODUCT_CATEGORIES = ["Laptop", "Headphone", "Smartphone"];

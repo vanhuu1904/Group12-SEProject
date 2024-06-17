@@ -118,6 +118,7 @@ const ListProducts = () => {
           bordered
           striped
           hover
+          pagesAmount={10}
         />
       </AdminLayout>
     </>

@@ -74,7 +74,12 @@ const Dashboard = () => {
               <div className="text-center card-font-size">
                 Sales
                 <br />
-                <b>{data?.totalSales?.toFixed(2)}đ</b>
+                <b>
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(data?.totalSales)}
+                </b>
               </div>
             </div>
           </div>
