@@ -24,9 +24,9 @@ const ProductReviews = () => {
     if (deleteError) {
       toast.error(deleteError?.data?.message);
     }
-    // if (isSuccess) {
-    //   toast.success("");
-    // }
+    if (isSuccess) {
+      toast.success("Delete review product successfully!");
+    }
   }, [error]);
   const submitHandler = (e) => {
     e.preventDefault();

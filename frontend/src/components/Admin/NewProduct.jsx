@@ -18,9 +18,9 @@ const NewProduct = () => {
     price: "",
     category: "",
     stock: "",
-    seller: "",
+    brand: "",
   });
-  const { name, description, price, category, stock, seller } = product;
+  const { name, description, price, category, stock, brand } = product;
   const onChange = (e) => {
     setProduct({ ...product, [e.target.name]: e.target.value });
   };
@@ -128,16 +128,15 @@ const NewProduct = () => {
                 </select>
               </div>
               <div className="mb-3 col">
-                <label htmlFor="seller_field" className="form-label">
-                  {" "}
-                  Seller Name{" "}
+                <label htmlFor="brand" className="form-label">
+                  Brand
                 </label>
                 <input
                   type="text"
-                  id="seller_field"
+                  id="brand"
                   className="form-control"
-                  name="seller"
-                  value={seller}
+                  name="brand"
+                  value={brand}
                   onChange={onChange}
                 />
               </div>

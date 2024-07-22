@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../layout/AdminLayout";
 import MetaData from "../layout/MetaData";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   useOrderDetailsQuery,
   useUpdateOrderMutation,
 } from "../../redux/api/orderApi";
 import toast from "react-hot-toast";
-import Loader from "../layout/Loader";
 
 const ProcessOrder = () => {
-  const navigate = useNavigate();
-
   const [status, setStatus] = useState("");
   const params = useParams();
   const { data } = useOrderDetailsQuery(params?.id);
@@ -45,8 +42,32 @@ const ProcessOrder = () => {
   const isPaid = paymentInfo?.status === "paid" ? true : false;
 
   const updateOrderHandler = (id) => {
+    console.log(">>>check data: ", status);
+    console.log(">>>check status: ", order?.status);
     const data = { status };
-    updateOrder({ id, body: data });
+    if (status === "Reject") {
+      if (orderStatus === "Processing") {
+        console.log(">>>check data: ", data);
+        updateOrder({ id, body: data });
+      } else if (orderStatus === "Shipping" || orderStatus === "Delivered") {
+        toast.error("Không thể cập nhật trạng thái đơn hàng!");
+        return;
+      }
+    } else if (status === "Shipping") {
+      if (orderStatus === "Processing") {
+        updateOrder({ id, body: data });
+      } else {
+        toast.error("Không thể cập nhật trạng thái đơn hàng!");
+        return;
+      }
+    } else if (status === "Delivered") {
+      if (orderStatus === "Shipping") {
+        updateOrder({ id, body: data });
+      } else {
+        toast.error("Không thể cập nhật trạng thái đơn hàng!");
+        return;
+      }
+    }
   };
   return (
     <AdminLayout>
@@ -107,10 +128,10 @@ const ProcessOrder = () => {
                 <th scope="row">Method</th>
                 <td>{order?.paymentMethod}</td>
               </tr>
-              <tr>
+              {/* <tr>
                 <th scope="row">Stripe ID</th>
                 <td>{paymentInfo?.id || "Nill"} </td>
-              </tr>
+              </tr> */}
               <tr>
                 <th scope="row">Amount Paid</th>
                 <td>{totalAmount}đ</td>
@@ -164,9 +185,10 @@ const ProcessOrder = () => {
               value={status}
               onChange={(e) => setStatus(e.target.value)}
             >
-              <option value="Processing">Processing</option>
-              <option value="Shipped">Shipped</option>
-              <option value="Delivered">Delivered</option>
+              <option value="Reject">Hủy đơn hàng</option>
+              <option value="Processing">Đang chuẩn bị hàng</option>
+              <option value="Shipping">Đang giao hàng</option>
+              <option value="Delivered">Giao hàng thành công</option>
             </select>
           </div>
 

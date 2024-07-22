@@ -10,18 +10,18 @@ const Cart = () => {
   console.log(">>>check cart: ", cartItems);
 
   const increaseQty = (item, quantity) => {
+    console.log(">>>check quantity: ", quantity);
+    console.log(">>check item: ", item);
     const newQty = quantity + 1;
-
     if (newQty > item?.stock) return;
-
     setItemToCart(item, newQty);
   };
 
   const decreaseQty = (item, quantity) => {
+    console.log(">>>check quantity: ", quantity);
+    console.log(">>check item: ", item);
     const newQty = quantity - 1;
-
     if (newQty <= 0) return;
-
     setItemToCart(item, newQty);
   };
 
@@ -72,8 +72,9 @@ const Cart = () => {
                         />
                       </div>
                       <div class="col-5 col-lg-3">
-                        <Link to={`product/${item?.product}`}>
-                          {item?.name}
+                        <Link to={`/product/${item?.product}`}>
+                          {" "}
+                          {item?.name}{" "}
                         </Link>
                       </div>
                       <div class="col-4 col-lg-2 mt-4 mt-lg-0">

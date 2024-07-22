@@ -24,6 +24,22 @@ const OrderDetails = () => {
     orderStatus,
   } = order;
   const isPaid = paymentInfo?.status === "paid" ? true : false;
+  let status = "";
+  if (orderStatus === "Reject") {
+    status = "Đơn hàng bị hủy";
+  } else if (orderStatus === "Processing") {
+    status = "Đơn hàng đang chuẩn bị";
+  } else if (orderStatus === "Shipping") {
+    status = "Đơn hàng đang được giao";
+  } else {
+    status = "Giao hàng thành công";
+  }
+  let paid = "";
+  if (paymentInfo?.status === "paid") {
+    paid = "Đã thanh toán";
+  } else {
+    paid = "Chưa thanh toán";
+  }
   if (isLoading) return <Loader />;
   return (
     <>
@@ -54,7 +70,7 @@ const OrderDetails = () => {
                       : "redColor"
                   }
                 >
-                  <b>{orderStatus}</b>
+                  <b>{status}</b>
                 </td>
               </tr>
               <tr>
@@ -88,7 +104,7 @@ const OrderDetails = () => {
               <tr>
                 <th scope="row">Status</th>
                 <td className={isPaid ? "greenColor" : "redColor"}>
-                  <b>{paymentInfo?.status}</b>
+                  <b>{paid}</b>
                 </td>
               </tr>
               <tr>
@@ -96,12 +112,16 @@ const OrderDetails = () => {
                 <td>{order?.paymentMethod}</td>
               </tr>
               <tr>
-                <th scope="row">Stripe ID</th>
-                <td>{paymentInfo?.id || "Nill"} </td>
-              </tr>
-              <tr>
                 <th scope="row">Amount Paid</th>
-                <td>{totalAmount}đ</td>
+                <td>
+                  {" "}
+                  <span>
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(totalAmount)}
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -126,15 +146,17 @@ const OrderDetails = () => {
                 </div>
 
                 <div className="col-4 col-lg-2 mt-4 mt-lg-0">
-                  <p>{item?.price}đ</p>
+                  <p>
+                    {" "}
+                    {new Intl.NumberFormat("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    }).format(item?.price)}
+                  </p>
                 </div>
 
                 <div className="col-4 col-lg-3 mt-4 mt-lg-0">
-                  <p>
-                    {item?.quantity > 1
-                      ? `${item?.quantity} Pieces`
-                      : `${item?.quantity} Piece`}
-                  </p>
+                  <p>Số lượng: {item?.quantity}</p>
                 </div>
               </div>
             ))}

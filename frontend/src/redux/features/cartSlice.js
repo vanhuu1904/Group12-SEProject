@@ -15,15 +15,17 @@ const cartSlice = createSlice({
   reducers: {
     setCartItem: (state, action) => {
       const item = action.payload;
-
-      const isItemExist = state.cartItems.find(
+      console.log("check item: ", item);
+      const isExistIndex = state.cartItems.findIndex(
         (i) => i.product === item.product
       );
+      console.log("check index: ", isExistIndex);
+      console.log("check cart: ", state.cartItems);
 
-      if (isItemExist) {
-        state.cartItems = state.cartItems.map((i) =>
-          i.product === isItemExist.product ? item : i
-        );
+      if (isExistIndex > -1) {
+        if (state.cartItems[isExistIndex]) {
+          state.cartItems[isExistIndex].quantity += item.quantity;
+        }
       } else {
         state.cartItems = [...state.cartItems, item];
       }

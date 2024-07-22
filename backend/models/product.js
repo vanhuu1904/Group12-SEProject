@@ -60,7 +60,7 @@ const productSchema = new mongoose.Schema(
     },
     seller: {
       type: String,
-      required: [true, "Please enter product"],
+      // required: [true, "Please enter product"],
     },
     stock: {
       type: Number,

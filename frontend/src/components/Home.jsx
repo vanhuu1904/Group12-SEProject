@@ -34,7 +34,7 @@ const Home = () => {
       toast.error(error?.data?.message);
     }
   }, [isError]);
-  const columnSize = keyword ? 4 : 3;
+  const columnSize = keyword ? 3 : 3;
   if (isLoading) return <Loader />;
   return (
     <>
@@ -48,9 +48,10 @@ const Home = () => {
         }
         <div className="col-12 col-sm-6 col-md-9">
           <h1 id="products_heading" className="text-secondary">
-            {keyword
+            Latest Products
+            {/* {keyword
               ? `${data?.products?.length} Products found with keyword: ${keyword}`
-              : "Latest Products"}
+              : "Latest Products"} */}
           </h1>
 
           <section id="products" className="mt-5">

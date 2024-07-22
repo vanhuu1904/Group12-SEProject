@@ -67,11 +67,54 @@ const MyOrders = () => {
     };
 
     data?.orders?.forEach((order) => {
+      let statusOrder = "";
+      let classOrder = "";
+      if (order?.orderStatus === "Reject") {
+        statusOrder = "Đơn hàng bị hủy";
+        classOrder = "redColor";
+      } else if (order?.orderStatus === "Processing") {
+        statusOrder = "Đơn hàng đang chuẩn bị";
+        classOrder = "orangeColor";
+      } else if (order?.orderStatus === "Shipping") {
+        statusOrder = "Đơn hàng đang được giao";
+        classOrder = "yellowColor";
+      } else {
+        statusOrder = "Giao hàng thành công";
+        classOrder = "greenColor";
+      }
+      let paid = "";
+      if (order?.paymentInfo?.status === "paid") {
+        paid = "Đã thanh toán";
+      } else {
+        paid = "Chưa thanh toán";
+      }
       orders.rows.push({
         id: order?._id,
-        amount: `${order?.totalAmount}đ`,
-        status: order?.paymentInfo?.status?.toUpperCase(),
-        orderStatus: order?.orderStatus,
+        amount: (
+          <span>
+            {new Intl.NumberFormat("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            }).format(order?.totalAmount)}
+          </span>
+        ),
+        status: (
+          <span
+            className={
+              String(order?.paymentInfo?.status).includes("paid")
+                ? "greenColor"
+                : "yellowColor"
+            }
+            style={{ "font-weight": "bold" }}
+          >
+            {paid}
+          </span>
+        ),
+        orderStatus: (
+          <span className={classOrder} style={{ "font-weight": "bold" }}>
+            {statusOrder}
+          </span>
+        ),
         actions: (
           <>
             <Link to={`/me/order/${order?._id}`} className="btn btn-primary">
